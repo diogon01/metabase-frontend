@@ -1,0 +1,530 @@
+/* ═══════════════════════════════════════
+   FREEDOM DS — base visual (adotada Fase 3a)
+   Tokens, Material theme e fontes self-hosted do projeto
+   c:\Users\rayan\Downloads\ui-angular
+═══════════════════════════════════════ */
+@use '@angular/material' as mat;
+
+/* ── Inter self-hosted (4 weights, latin + latin-ext) ────────────── */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url('/assets/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url('/assets/fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('/assets/fonts/inter-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url('/assets/fonts/inter-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('/assets/fonts/inter-latin.woff2') format('woff2');
+}
+
+/* ── Material Icons (self-hosted) ─────────────────────────────────── */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal; font-weight: 400; font-display: block;
+  src: url('/assets/fonts/material-icons.woff2') format('woff2');
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal; font-style: normal; font-size: 24px;
+  line-height: 1; letter-spacing: normal; text-transform: none;
+  display: inline-block; white-space: nowrap; word-wrap: normal;
+  direction: ltr; -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased;
+}
+
+/* ── Material theme (Freedom Yellow primary) ──────────────────────── */
+@include mat.core();
+
+$freedom-yellow-map: (
+  50:  #FFFBE5, 100: #FFF3B3, 200: #FFE680, 300: #FFD94D,
+  400: #FFCC1A, 500: #FFD500, 600: #E6C000, 700: #B38F00,
+  800: #805F00, 900: #4D3A00,
+  contrast: (
+    50:  #1F2937, 100: #1F2937, 200: #1F2937, 300: #1F2937, 400: #1F2937,
+    500: #1F2937, 600: #FFFFFF, 700: #FFFFFF, 800: #FFFFFF, 900: #FFFFFF
+  )
+);
+
+$fd-primary: mat.m2-define-palette($freedom-yellow-map, 500, 300, 800);
+$fd-accent:  mat.m2-define-palette(mat.$m2-indigo-palette, 500, 300, 700);
+$fd-warn:    mat.m2-define-palette(mat.$m2-red-palette, 500);
+
+$fd-theme: mat.m2-define-light-theme((
+  color: (primary: $fd-primary, accent: $fd-accent, warn: $fd-warn),
+  density: -2,
+));
+
+@include mat.all-component-themes($fd-theme);
+
+/* ═══════════════════════════════════════
+   :root tokens (canônico Freedom DS)
+═══════════════════════════════════════ */
+:root {
+  color-scheme: light;
+
+  /* Edge / neutros */
+  --edge-bg: #FAFBFB;
+  --edge-surface: #FFFFFF;
+  --edge-surface-alt: #F3F4F6;
+  --edge-border: #E5E7EB;
+  --edge-border-light: #F0F1F2;
+  --edge-text: #1F2937;
+  --edge-muted: #6B7280;
+  --edge-mute-2: #9CA3AF;
+
+  /* Accents semânticos */
+  --accent-blue: #4E61F6;
+  --accent-blue-bg: rgba(78, 97, 246, 0.08);
+  --accent-green: #22C55E;
+  --accent-green-bg: rgba(34, 197, 94, 0.08);
+  --accent-yellow: #FFD500;
+  --accent-yellow-bg: rgba(255, 213, 0, 0.10);
+  --accent-red: #E2413C;
+  --accent-red-bg: rgba(226, 65, 60, 0.08);
+  --accent-orange: #F97316;
+  --accent-orange-bg: rgba(249, 115, 22, 0.08);
+
+  /* Freedom DS primary tokens */
+  --fd-primary: #FFD500;
+  --fd-primary-hover: #E6C000;
+  --fd-primary-fg: #1F2937;
+  --fd-ring: rgba(78, 97, 246, 0.35);
+
+  /* Elevation */
+  --fd-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --fd-shadow-2: 0 4px 12px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --fd-shadow-3: 0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+
+  /* Radius */
+  --fd-radius-sm: 10px;
+  --fd-radius-md: 12px;
+  --fd-radius-lg: 16px;
+  --fd-radius-xl: 20px;
+
+  /* Motion */
+  --fd-transition-fast: 150ms;
+  --fd-transition-base: 200ms;
+  --fd-transition-slow: 300ms;
+
+  /* Type scale */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --text-display: 700 32px/1.2 var(--font-family);
+  --text-h1: 700 28px/1.25 var(--font-family);
+  --text-h2: 600 24px/1.3 var(--font-family);
+  --text-h3: 600 20px/1.35 var(--font-family);
+  --text-body: 400 16px/1.5 var(--font-family);
+  --text-body-sm: 400 14px/1.5 var(--font-family);
+  --text-caption: 500 12px/1.4 var(--font-family);
+  --text-overline: 600 12px/1.4 var(--font-family);
+  --text-kpi: 700 36px/1.1 var(--font-family);
+
+  /* ─── Compat aliases (mantêm componentes legados funcionando) ───
+     Fase 7 (white-label) sobrescreve esses pra retornar Thera wine/gold
+     no tenant=thera. Por padrão (tenant=default) viram Freedom yellow/indigo. */
+  --wine: var(--fd-primary);
+  --wine-dark: var(--fd-primary-hover);
+  --wine-light: var(--fd-primary);
+  --gold: var(--accent-blue);
+  --gold-light: var(--accent-blue);
+
+  --bg: var(--edge-bg);
+  --bg-card: var(--edge-surface);
+  --bg-alt: var(--edge-surface-alt);
+  --border: var(--edge-border);
+  --border-light: var(--edge-border-light);
+  --text: var(--edge-text);
+  --text-2: var(--edge-muted);
+  --text-3: var(--edge-mute-2);
+  --green: var(--accent-green);
+  --green-bg: var(--accent-green-bg);
+  --red: var(--accent-red);
+  --red-bg: var(--accent-red-bg);
+  --orange: var(--accent-orange);
+  --orange-bg: var(--accent-orange-bg);
+  --blue: var(--accent-blue);
+  --blue-bg: var(--accent-blue-bg);
+  --radius: var(--fd-radius-md);
+  --radius-sm: var(--fd-radius-sm);
+  --shadow: var(--fd-shadow-1);
+  --shadow-hover: var(--fd-shadow-2);
+}
+
+/* ═══════════════════════════════════════
+   Base
+═══════════════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+html, body { min-height: 100%; }
+body {
+  font-family: var(--font-family);
+  background: var(--edge-bg);
+  color: var(--edge-text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+h1 { font: var(--text-h1); margin: 0; }
+h2 { font: var(--text-h2); margin: 0; }
+h3 { font: var(--text-h3); margin: 0; }
+h4 { font: 600 16px/1.4 var(--font-family); margin: 0; }
+h5, h6 { font: 600 14px/1.4 var(--font-family); margin: 0; }
+
+p, small, span, label, button, input, textarea, select { font-family: var(--font-family); }
+a { color: inherit; }
+
+/* Material drawer */
+.mat-drawer-container { background: transparent !important; }
+.mat-drawer-backdrop.mat-drawer-shown {
+  background: rgba(15, 23, 42, 0.26) !important;
+  backdrop-filter: blur(6px);
+}
+
+/* ═══════════════════════════════════════
+   Header (provisório enquanto Fase 3c não migra pro AppShell)
+═══════════════════════════════════════ */
+.app-header {
+  background: var(--edge-text);          /* slate-800 dark — antes wine-dark */
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+.app-header .brand { display: flex; align-items: center; gap: 12px; }
+.app-header .logo {
+  width: 32px; height: 32px;
+  background: var(--fd-primary);          /* yellow brand mark */
+  color: var(--fd-primary-fg);
+  border-radius: var(--fd-radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px;
+  box-shadow: 0 2px 8px rgba(255, 213, 0, 0.3);
+}
+.app-header .brand-name {
+  font-size: 16px; font-weight: 700; color: #fff; letter-spacing: .3px;
+}
+.app-header .brand-sub {
+  font-size: 11px; color: rgba(255, 255, 255, 0.55);
+  letter-spacing: .5px; text-transform: uppercase; margin-top: 1px;
+}
+.app-header .header-right { display: flex; align-items: center; gap: 16px; }
+.app-header .header-date { font-size: 12px; color: rgba(255, 255, 255, 0.6); letter-spacing: .3px; }
+.app-header .header-badge {
+  background: rgba(255, 213, 0, 0.15);
+  border: 1px solid rgba(255, 213, 0, 0.35);
+  color: var(--accent-yellow);
+  font-size: 11px; padding: 3px 10px;
+  border-radius: 20px; font-weight: 500; letter-spacing: .3px;
+}
+
+/* ═══════════════════════════════════════
+   Nav tabs (Fase 3d migra pra MatTabGroup)
+═══════════════════════════════════════ */
+.nav-tabs {
+  background: var(--edge-surface);
+  border-bottom: 1px solid var(--edge-border);
+  padding: 0 24px;
+  display: flex; gap: 0; overflow-x: auto;
+  scrollbar-width: none;
+  position: sticky; top: 60px; z-index: 99;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-tab {
+  padding: 14px 18px;
+  font-size: 13px; font-weight: 500; color: var(--edge-muted);
+  cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap;
+  transition: all var(--fd-transition-base);
+  display: flex; align-items: center; gap: 7px;
+  letter-spacing: .1px; background: none;
+  border-top: none; border-left: none; border-right: none;
+  font-family: var(--font-family);
+}
+.nav-tab:hover { color: var(--fd-primary-fg); }
+.nav-tab.active {
+  color: var(--fd-primary-fg);
+  border-bottom-color: var(--fd-primary);
+  font-weight: 600;
+}
+.nav-tab .tab-icon { font-size: 14px; }
+
+/* ═══════════════════════════════════════
+   Filter bar (Fase 3 substitui por mat-form-field)
+═══════════════════════════════════════ */
+.filter-bar {
+  background: var(--edge-surface);
+  border-bottom: 1px solid var(--edge-border-light);
+  padding: 10px 24px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.filter-label {
+  font-size: 12px; font-weight: 600; color: var(--edge-mute-2);
+  text-transform: uppercase; letter-spacing: .6px; white-space: nowrap;
+}
+.filter-select, .filter-input {
+  appearance: none;
+  background: var(--edge-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239B9690' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+  border: 1px solid var(--edge-border);
+  border-radius: var(--fd-radius-sm);
+  padding: 6px 32px 6px 12px;
+  font-size: 12px;
+  font-family: var(--font-family);
+  color: var(--edge-text);
+  cursor: pointer;
+  transition: border-color var(--fd-transition-base);
+  min-width: 140px;
+}
+.filter-input { background-image: none; padding-right: 12px; cursor: text; }
+.filter-select:focus, .filter-input:focus {
+  outline: none; border-color: var(--fd-primary);
+}
+.filter-sep {
+  width: 1px; height: 20px;
+  background: var(--edge-border); margin: 0 4px;
+}
+.filter-reset {
+  background: none;
+  border: 1px solid var(--edge-border);
+  color: var(--edge-muted);
+  font-size: 11px; padding: 4px 12px;
+  border-radius: 20px; font-weight: 500;
+  cursor: pointer; font-family: var(--font-family);
+  transition: all var(--fd-transition-base);
+}
+.filter-reset:hover { border-color: var(--fd-primary); color: var(--edge-text); }
+
+/* Strip dos filtros aplicados (debug temporário) */
+.active-filters {
+  background: var(--edge-surface-alt);
+  border-bottom: 1px solid var(--edge-border-light);
+  padding: 6px 24px;
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+}
+.active-pill {
+  font-size: 11px;
+  background: var(--edge-surface);
+  border: 1px solid var(--edge-border);
+  color: var(--edge-muted);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-family: var(--font-family);
+}
+.active-pill strong { color: var(--edge-text); font-weight: 600; margin-right: 4px; }
+
+/* ═══════════════════════════════════════
+   Main + section headers
+═══════════════════════════════════════ */
+.main { padding: 24px; max-width: 1600px; margin: 0 auto; }
+.section-title {
+  font: var(--text-h2);
+  color: var(--edge-text);
+  margin-bottom: 4px;
+}
+.section-sub {
+  font-size: 13px; color: var(--edge-muted); margin-bottom: 24px;
+}
+
+/* ═══════════════════════════════════════
+   GRID SYSTEM 12-COL (mobile-first)
+   Breakpoints: xs<600 | sm≥600 | md≥900 | lg≥1200 | xl≥1500
+═══════════════════════════════════════ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+app-card-renderer,
+app-kpi-card,
+app-chart-card,
+app-table-card,
+app-markdown-card,
+app-echarts-card,
+app-progress-card { display: contents; }
+
+.col-1{grid-column:span 1}.col-2{grid-column:span 2}.col-3{grid-column:span 3}
+.col-4{grid-column:span 4}.col-5{grid-column:span 5}.col-6{grid-column:span 6}
+.col-7{grid-column:span 7}.col-8{grid-column:span 8}.col-9{grid-column:span 9}
+.col-10{grid-column:span 10}.col-11{grid-column:span 11}.col-12{grid-column:span 12}
+
+@media (min-width: 600px) {
+  .col-sm-1{grid-column:span 1}.col-sm-2{grid-column:span 2}.col-sm-3{grid-column:span 3}
+  .col-sm-4{grid-column:span 4}.col-sm-5{grid-column:span 5}.col-sm-6{grid-column:span 6}
+  .col-sm-7{grid-column:span 7}.col-sm-8{grid-column:span 8}.col-sm-9{grid-column:span 9}
+  .col-sm-10{grid-column:span 10}.col-sm-11{grid-column:span 11}.col-sm-12{grid-column:span 12}
+}
+@media (min-width: 900px) {
+  .col-md-1{grid-column:span 1}.col-md-2{grid-column:span 2}.col-md-3{grid-column:span 3}
+  .col-md-4{grid-column:span 4}.col-md-5{grid-column:span 5}.col-md-6{grid-column:span 6}
+  .col-md-7{grid-column:span 7}.col-md-8{grid-column:span 8}.col-md-9{grid-column:span 9}
+  .col-md-10{grid-column:span 10}.col-md-11{grid-column:span 11}.col-md-12{grid-column:span 12}
+}
+@media (min-width: 1200px) {
+  .col-lg-1{grid-column:span 1}.col-lg-2{grid-column:span 2}.col-lg-3{grid-column:span 3}
+  .col-lg-4{grid-column:span 4}.col-lg-5{grid-column:span 5}.col-lg-6{grid-column:span 6}
+  .col-lg-7{grid-column:span 7}.col-lg-8{grid-column:span 8}.col-lg-9{grid-column:span 9}
+  .col-lg-10{grid-column:span 10}.col-lg-11{grid-column:span 11}.col-lg-12{grid-column:span 12}
+}
+@media (min-width: 1500px) {
+  .col-xl-1{grid-column:span 1}.col-xl-2{grid-column:span 2}.col-xl-3{grid-column:span 3}
+  .col-xl-4{grid-column:span 4}.col-xl-5{grid-column:span 5}.col-xl-6{grid-column:span 6}
+  .col-xl-7{grid-column:span 7}.col-xl-8{grid-column:span 8}.col-xl-9{grid-column:span 9}
+  .col-xl-10{grid-column:span 10}.col-xl-11{grid-column:span 11}.col-xl-12{grid-column:span 12}
+}
+
+/* ═══════════════════════════════════════
+   KPI Card
+═══════════════════════════════════════ */
+.kpi-card {
+  background: var(--edge-surface);
+  border: 1px solid var(--edge-border-light);
+  border-radius: var(--fd-radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--fd-shadow-1);
+  transition: box-shadow var(--fd-transition-base);
+  position: relative; overflow: hidden;
+  height: 140px;
+  display: flex; flex-direction: column;
+  min-width: 0;
+}
+.kpi-card:hover { box-shadow: var(--fd-shadow-2); }
+.kpi-card.highlight {
+  background: linear-gradient(135deg, var(--edge-text) 0%, #374151 100%);
+  border-color: transparent;
+}
+.kpi-card.highlight .kpi-label,
+.kpi-card.highlight .kpi-state { color: rgba(255, 255, 255, 0.65); }
+.kpi-card.highlight .kpi-value { color: #fff; }
+.kpi-card.highlight .kpi-accent {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--fd-primary);
+}
+
+.kpi-label {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .6px;
+  color: var(--edge-mute-2);
+  padding-right: 48px;
+  display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+  min-height: 28px; line-height: 1.3;
+}
+.kpi-value {
+  font-size: 26px; font-weight: 700;
+  color: var(--edge-text);
+  line-height: 1.1; letter-spacing: -.5px;
+  margin-top: auto;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.kpi-value .unit { font-size: 14px; font-weight: 600; opacity: .7; margin-right: 2px; }
+.kpi-state { font-size: 11px; color: var(--edge-mute-2); margin-top: 4px; }
+.kpi-accent {
+  position: absolute; top: 16px; right: 16px;
+  font-size: 20px;
+  background: var(--edge-surface-alt);
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════
+   Chart Card
+═══════════════════════════════════════ */
+.chart-card {
+  background: var(--edge-surface);
+  border: 1px solid var(--edge-border-light);
+  border-radius: var(--fd-radius-md);
+  padding: 20px;
+  box-shadow: var(--fd-shadow-1);
+  display: flex; flex-direction: column;
+  min-width: 0;
+}
+.chart-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 16px; gap: 12px;
+}
+.chart-title { font-size: 14px; font-weight: 600; color: var(--edge-text); }
+.chart-subtitle { font-size: 12px; color: var(--edge-mute-2); margin-top: 2px; }
+.chart-tag {
+  background: var(--edge-surface-alt);
+  border: 1px solid var(--edge-border);
+  color: var(--edge-muted);
+  font-size: 11px; padding: 3px 10px;
+  border-radius: 20px; font-weight: 500;
+  white-space: nowrap;
+}
+.chart-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.chart-body {
+  position: relative; width: 100%; height: 280px; flex: 1;
+}
+.chart-body.tall { height: 340px; }
+.chart-body > ngx-charts-line-chart,
+.chart-body > ngx-charts-area-chart,
+.chart-body > ngx-charts-bar-vertical,
+.chart-body > ngx-charts-bar-horizontal,
+.chart-body > ngx-charts-pie-chart,
+.chart-body > ngx-charts-advanced-pie-chart {
+  display: block; width: 100%; height: 100%;
+}
+
+/* ═══════════════════════════════════════
+   States: loading / error / empty
+═══════════════════════════════════════ */
+.state {
+  color: var(--edge-mute-2); font-size: 12px;
+  padding: 32px 0; text-align: center;
+}
+.state.error { color: var(--accent-red); }
+.state.empty { color: var(--edge-mute-2); font-style: italic; }
+
+/* ═══════════════════════════════════════
+   Raw table fallback
+═══════════════════════════════════════ */
+table.raw { width: 100%; font-size: 12px; border-collapse: collapse; }
+table.raw th, table.raw td {
+  border-bottom: 1px solid var(--edge-border-light);
+  padding: 6px 8px; text-align: left;
+}
+table.raw th {
+  font-weight: 600; text-transform: uppercase;
+  font-size: 11px; letter-spacing: .5px;
+  color: var(--edge-mute-2);
+  border-bottom: 2px solid var(--edge-border);
+}
+table.raw tr:hover td { background: var(--edge-surface-alt); }
+
+/* ═══════════════════════════════════════
+   ngx-charts text override
+═══════════════════════════════════════ */
+.ngx-charts text {
+  font-family: var(--font-family) !important;
+  fill: var(--edge-muted);
+}
+.ngx-charts .gridline-path { stroke: var(--edge-border-light); }
+
+/* ═══════════════════════════════════════
+   Snackbar styles (futuro)
+═══════════════════════════════════════ */
+.snackbar-success .mdc-snackbar__surface { background: var(--accent-green) !important; }
+.snackbar-error .mdc-snackbar__surface { background: var(--accent-red) !important; }

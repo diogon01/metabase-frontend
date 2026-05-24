@@ -1,0 +1,8 @@
+node_modules/
+.angular/
+dist/
+.env
+.env.local
+src/environments/environment.local.ts
+*.log
+.DS_Store
