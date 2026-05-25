@@ -23,13 +23,17 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderComponent } from '../header/header.component';
 import { ChatPanelComponent } from '../../../chat/chat-panel.component';
 import { ChatStore } from '../../../chat/chat.store';
+import {
+  BreadcrumbComponent,
+  BreadcrumbItem,
+} from '../../../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-shell',
   standalone: true,
   imports: [
     RouterOutlet, MatSidenavModule,
-    SidebarComponent, HeaderComponent, ChatPanelComponent,
+    SidebarComponent, HeaderComponent, ChatPanelComponent, BreadcrumbComponent,
   ],
   template: `
     <mat-sidenav-container class="shell-container">
@@ -46,6 +50,7 @@ import { ChatStore } from '../../../chat/chat.store';
         <app-header (menuToggle)="toggleSidebar()" />
         <div class="shell-body" [class.chat-open]="chatOpen()">
           <main class="shell-main">
+            <app-breadcrumb class="shell-breadcrumb" [items]="breadcrumbs()" />
             <router-outlet />
           </main>
           @if (chatOpen()) {
@@ -69,6 +74,7 @@ export class AppShellComponent {
   readonly sidenavMode = computed<'side' | 'over'>(() => (this.isMobile() ? 'over' : 'side'));
   readonly sidenavOpened = computed(() => !this.isMobile());
   readonly chatOpen = this.chat.open;
+  readonly breadcrumbs = signal<BreadcrumbItem[]>(this.buildBreadcrumbs(this.router.url));
 
   constructor() {
     // Em mobile, auto-fecha sidebar ao navegar
@@ -78,6 +84,7 @@ export class AppShellComponent {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
+        this.breadcrumbs.set(this.buildBreadcrumbs(this.router.url));
         if (this.isMobile()) this.sidenav()?.close();
       });
   }
@@ -91,5 +98,29 @@ export class AppShellComponent {
     if (typeof window !== 'undefined') {
       this.isMobile.set(window.innerWidth <= 1024);
     }
+  }
+
+  private buildBreadcrumbs(url: string): BreadcrumbItem[] {
+    const path = url.split('?')[0].split('#')[0];
+    const segments = path.split('/').filter(Boolean);
+    const items: BreadcrumbItem[] = [{ label: 'Início', route: ['/'] }];
+
+    if (segments[0] === 'settings') {
+      items.push({ label: 'Configurações' });
+      if (segments[1] === 'branding') items.push({ label: 'Branding' });
+      return items;
+    }
+
+    items.push({ label: 'Dashboards', route: ['/'] });
+
+    if (segments[0] === 'd' && segments[1]) {
+      items.push({ label: `Dashboard ${segments[1]}`, route: ['/d', segments[1]] });
+    }
+
+    if (segments[0] === 'd' && segments[2] === 'tab' && segments[3]) {
+      items.push({ label: `Aba ${segments[3]}` });
+    }
+
+    return items;
   }
 }

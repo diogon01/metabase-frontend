@@ -109,6 +109,72 @@ $fd-theme: mat.m2-define-light-theme((
   --fd-shadow-2: 0 4px 12px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.06);
   --fd-shadow-3: 0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
 
+  /* NALK app theme tokens */
+  --app-theme-name: NALK;
+  --app-brand-primary: var(--fd-primary);
+  --app-brand-primary-hover: var(--fd-primary-hover);
+  --app-brand-primary-fg: var(--fd-primary-fg);
+  --app-brand-accent: var(--fd-primary-hover);
+  --app-background: var(--edge-bg);
+  --app-surface: var(--edge-surface);
+  --app-surface-alt: var(--edge-surface-alt);
+  --app-surface-muted: color-mix(in srgb, var(--accent-yellow) 5%, var(--edge-surface));
+  --app-on-surface: var(--edge-text);
+  --app-on-surface-muted: var(--edge-muted);
+  --app-border: var(--edge-border);
+  --app-border-soft: var(--edge-border-light);
+  --app-success: var(--accent-green);
+  --app-danger: var(--accent-red);
+  --app-danger-soft: color-mix(in srgb, var(--accent-red) 10%, var(--app-surface));
+  --app-danger-border: color-mix(in srgb, var(--accent-red) 28%, transparent);
+  --app-danger-text: var(--accent-red);
+  --app-shadow-sm: 0 1px 2px color-mix(in srgb, var(--app-on-surface) 5%, transparent);
+  --app-shadow-md: 0 18px 42px color-mix(in srgb, var(--app-on-surface) 7%, transparent);
+  --app-shell-bg:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent-yellow) 10%, transparent), transparent 20%),
+    linear-gradient(180deg, var(--app-background) 0%, var(--app-surface-muted) 100%);
+  --app-shell-sidenav-shadow: 24px 0 48px color-mix(in srgb, var(--app-on-surface) 6%, transparent);
+
+  --app-sidebar-bg:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent-yellow) 18%, transparent), transparent 34%),
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-yellow) 4%, var(--edge-surface)) 0%, var(--edge-surface) 16%, var(--app-background) 100%);
+  --app-sidebar-brand-bg: color-mix(in srgb, var(--app-surface) 94%, transparent);
+  --app-sidebar-brand-border: var(--app-border);
+  --app-sidebar-brand-shadow: var(--app-shadow-sm);
+  --app-sidebar-brand-mark-shadow: 0 12px 24px color-mix(in srgb, var(--app-brand-primary) 20%, transparent);
+  --app-sidebar-brand-kicker: color-mix(in srgb, var(--fd-primary-hover) 72%, var(--edge-text));
+  --app-sidebar-section-label: var(--app-on-surface);
+  --app-sidebar-nav-text: var(--app-on-surface);
+  --app-sidebar-nav-muted: var(--app-on-surface-muted);
+  --app-sidebar-nav-icon: var(--app-on-surface-muted);
+  --app-sidebar-nav-hover-bg: color-mix(in srgb, var(--app-brand-primary) 8%, var(--app-surface));
+  --app-sidebar-active-bg: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--app-brand-primary) 18%, var(--app-surface)) 0%,
+    color-mix(in srgb, var(--app-brand-primary) 8%, var(--app-surface)) 100%
+  );
+  --app-sidebar-active-border: color-mix(in srgb, var(--app-brand-primary) 72%, transparent);
+  --app-sidebar-active-rail: var(--app-brand-primary);
+  --app-sidebar-active-icon: var(--app-brand-primary-fg);
+  --app-sidebar-active-text: var(--app-on-surface);
+  --app-sidebar-active-title: var(--app-on-surface);
+  --app-sidebar-active-muted: var(--app-on-surface);
+  --app-sidebar-active-shadow: 0 1px 5px color-mix(in srgb, var(--app-brand-primary) 18%, transparent);
+  --app-sidebar-active-glow: 0 0 8px color-mix(in srgb, var(--app-brand-primary) 34%, transparent);
+  --app-sidebar-active-badge-bg: color-mix(in srgb, var(--app-brand-primary) 18%, var(--app-surface));
+  --app-sidebar-active-badge-border: color-mix(in srgb, var(--app-brand-primary) 45%, transparent);
+  --app-sidebar-active-badge-text: var(--app-on-surface);
+  --app-sidebar-tree-line: color-mix(in srgb, var(--app-brand-primary) 55%, transparent);
+  --app-sidebar-subitem-bg: color-mix(in srgb, var(--app-brand-primary) 8%, var(--app-surface));
+  --app-sidebar-subitem-active-bg: color-mix(in srgb, var(--app-brand-primary) 20%, var(--app-surface));
+  --app-sidebar-link: var(--app-brand-primary-hover);
+  --app-breadcrumb-text: var(--app-on-surface-muted);
+  --app-breadcrumb-link: var(--app-brand-primary-hover);
+  --app-breadcrumb-link-hover: var(--app-brand-primary);
+  --app-breadcrumb-separator: color-mix(in srgb, var(--app-on-surface-muted) 72%, transparent);
+  --app-breadcrumb-current: var(--app-on-surface);
+  --app-breadcrumb-focus-ring: var(--fd-ring);
+
   /* Radius */
   --fd-radius-sm: 10px;
   --fd-radius-md: 12px;
@@ -191,6 +257,347 @@ a { color: inherit; }
 .mat-drawer-backdrop.mat-drawer-shown {
   background: rgba(15, 23, 42, 0.26) !important;
   backdrop-filter: blur(6px);
+}
+
+/* NALK sidebar shell */
+app-sidebar,
+app-sidebar-node {
+  display: block;
+}
+
+app-sidebar {
+  height: 100%;
+}
+
+app-sidebar .sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1rem 0.9rem 1.2rem;
+  color: var(--app-on-surface);
+  background: var(--app-sidebar-bg);
+}
+
+app-sidebar .brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 0.85rem 1rem;
+  border-radius: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  background: var(--app-sidebar-brand-bg);
+  border: 1px solid var(--app-sidebar-brand-border);
+  box-shadow: var(--app-sidebar-brand-shadow);
+}
+
+app-sidebar .brand-mark {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--fd-primary);
+  color: var(--fd-primary-fg);
+  font-size: 1.5rem;
+  font-weight: 700;
+  box-shadow: var(--app-sidebar-brand-mark-shadow);
+}
+
+app-sidebar .brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+app-sidebar .brand-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+app-sidebar .brand-copy strong {
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+app-sidebar .brand-copy small {
+  margin-top: 0.15rem;
+  font-size: 0.72rem;
+  color: var(--app-on-surface-muted);
+}
+
+app-sidebar .brand-kicker,
+app-sidebar .section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+app-sidebar .brand-kicker {
+  color: var(--app-sidebar-brand-kicker);
+}
+
+app-sidebar .sidebar-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.15rem;
+  margin-top: 1rem;
+}
+
+app-sidebar .sidebar-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+app-sidebar .sidebar-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--app-sidebar-nav-muted) 35%, transparent);
+}
+
+app-sidebar .section-label {
+  padding: 0 0.85rem 0.5rem;
+  color: var(--app-sidebar-section-label);
+}
+
+app-sidebar .nav-list,
+app-sidebar .nav-block,
+app-sidebar .sublist {
+  display: flex;
+  flex-direction: column;
+}
+
+app-sidebar .nav-list,
+app-sidebar .nav-block {
+  gap: 0.35rem;
+}
+
+app-sidebar .nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.78rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  background: transparent;
+  color: var(--app-sidebar-nav-text);
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: clip;
+  transition: background var(--fd-transition-fast) ease, border-color var(--fd-transition-fast) ease, transform var(--fd-transition-fast) ease;
+}
+
+app-sidebar .nav-item:hover {
+  background: var(--app-sidebar-nav-hover-bg);
+  transform: translateX(2px);
+}
+
+app-sidebar .nav-item.is-open,
+app-sidebar .nav-item.is-active {
+  color: var(--app-sidebar-active-text);
+  font-weight: 700;
+  border-color: var(--app-sidebar-active-border);
+  background: var(--app-sidebar-active-bg);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--app-surface) 78%, transparent), var(--app-sidebar-active-shadow);
+}
+
+app-sidebar .nav-item.is-open::before,
+app-sidebar .nav-item.is-active::before {
+  content: '';
+  position: absolute;
+  top: 0.45rem;
+  bottom: 0.45rem;
+  left: 0.3rem;
+  width: 0.3rem;
+  border-radius: 999px;
+  background: var(--app-sidebar-active-rail);
+  box-shadow: var(--app-sidebar-active-glow);
+}
+
+app-sidebar .nav-item-main {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 0;
+  flex: 1;
+}
+
+app-sidebar .nav-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+app-sidebar .nav-icon,
+app-sidebar .nav-chevron {
+  flex-shrink: 0;
+  color: var(--app-sidebar-nav-icon);
+}
+
+app-sidebar .nav-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  font-size: 1.25rem;
+}
+
+app-sidebar .nav-chevron {
+  width: 1.15rem;
+  height: 1.15rem;
+  font-size: 1.15rem;
+  transition: transform var(--fd-transition-fast) ease;
+}
+
+app-sidebar .nav-item.is-open .nav-icon,
+app-sidebar .nav-item.is-active .nav-icon {
+  color: var(--app-sidebar-active-icon);
+}
+
+app-sidebar .nav-item.is-open .nav-chevron {
+  color: var(--app-sidebar-active-muted);
+  transform: rotate(180deg);
+}
+
+app-sidebar .nav-title,
+app-sidebar .sub-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+app-sidebar .nav-title {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+app-sidebar .nav-description {
+  margin-top: 0.15rem;
+  color: var(--app-sidebar-nav-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+app-sidebar .sublist {
+  gap: 0.25rem;
+  margin-left: 0.9rem;
+  padding: 0.2rem 0 0.15rem 1.05rem;
+  border-left: 2px solid var(--app-sidebar-tree-line);
+}
+
+app-sidebar .sub-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 0.95rem;
+  color: var(--app-sidebar-nav-text);
+  font-size: 0.84rem;
+  text-decoration: none;
+  transition: background var(--fd-transition-fast) ease, border-color var(--fd-transition-fast) ease, transform var(--fd-transition-fast) ease;
+}
+
+app-sidebar .sub-item:hover {
+  background: var(--app-sidebar-subitem-bg);
+  transform: translateX(2px);
+}
+
+app-sidebar .sub-item.is-active {
+  background: var(--app-sidebar-subitem-active-bg);
+  border-color: var(--app-sidebar-active-border);
+  box-shadow: inset 3px 0 0 var(--app-sidebar-active-rail);
+  font-weight: 700;
+  transform: translateX(2px);
+}
+
+app-sidebar .sub-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--app-sidebar-nav-muted);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+app-sidebar .sub-item.is-active .sub-icon {
+  color: var(--app-sidebar-active-icon);
+}
+
+app-sidebar .nav-state {
+  padding: 0.85rem;
+  color: var(--app-sidebar-nav-muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+app-sidebar .nav-state.error {
+  color: var(--app-danger);
+  font-style: normal;
+}
+
+app-sidebar .admin-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px dashed color-mix(in srgb, var(--app-on-surface) 10%, transparent);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--app-brand-primary) 6%, var(--app-surface));
+  color: var(--app-sidebar-nav-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+app-sidebar .admin-link:hover,
+app-sidebar .admin-link.is-active {
+  border-color: var(--app-sidebar-active-border);
+  background: var(--app-sidebar-active-bg);
+  color: var(--app-sidebar-active-text);
+}
+
+app-sidebar .admin-link .nav-icon {
+  width: 1rem;
+  height: 1rem;
+  font-size: 1rem;
+}
+
+app-sidebar .sidebar-footer {
+  margin-top: 1rem;
+}
+
+app-sidebar .footer-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--app-on-surface-muted) 12%, transparent);
+  border-radius: 1rem;
+  background: var(--app-surface);
+}
+
+app-sidebar .footer-label {
+  color: var(--app-on-surface-muted);
+  font-size: 0.76rem;
+}
+
+app-sidebar .version-tag {
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--app-brand-primary) 10%, var(--app-surface));
+  color: var(--app-on-surface);
+  font-size: 0.72rem;
+  font-weight: 700;
 }
 
 /* ═══════════════════════════════════════
@@ -326,14 +733,53 @@ a { color: inherit; }
 /* ═══════════════════════════════════════
    Main + section headers
 ═══════════════════════════════════════ */
-.main { padding: 24px; max-width: 1600px; margin: 0 auto; }
+.main {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(18px, 1.4vw, 28px) clamp(20px, 1.65vw, 32px) 32px;
+}
 .section-title {
-  font: var(--text-h2);
+  font: var(--text-h1);
   color: var(--edge-text);
   margin-bottom: 4px;
 }
 .section-sub {
-  font-size: 13px; color: var(--edge-muted); margin-bottom: 24px;
+  font-size: 13px; color: var(--edge-muted); margin-bottom: 0;
+}
+
+.page-header {
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  border: 1px solid color-mix(in srgb, var(--app-brand-primary) 18%, transparent);
+  border-radius: var(--fd-radius-xl);
+  background:
+    radial-gradient(120% 180% at 0% 0%, color-mix(in srgb, var(--app-brand-primary) 12%, transparent), transparent 60%),
+    color-mix(in srgb, var(--app-surface) 94%, transparent);
+  box-shadow: 0 18px 42px color-mix(in srgb, var(--app-on-surface) 5%, transparent);
+}
+
+.page-header-text {
+  min-width: 0;
+}
+
+.page-header-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.export-pdf-btn {
+  min-height: 38px;
+  border-color: color-mix(in srgb, var(--app-brand-primary) 28%, var(--app-border)) !important;
+  border-radius: 999px !important;
+  background: color-mix(in srgb, var(--app-surface) 88%, transparent) !important;
+  color: var(--app-on-surface) !important;
+  font-weight: 700;
+}
+
+.export-pdf-btn mat-icon {
+  color: var(--app-brand-primary-hover);
 }
 
 /* ═══════════════════════════════════════
@@ -343,7 +789,7 @@ a { color: inherit; }
 .grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 16px;
+  gap: 18px;
   width: 100%;
   margin-bottom: 24px;
 }
@@ -390,27 +836,35 @@ app-progress-card { display: contents; }
    KPI Card
 ═══════════════════════════════════════ */
 .kpi-card {
-  background: var(--edge-surface);
-  border: 1px solid var(--edge-border-light);
-  border-radius: var(--fd-radius-md);
-  padding: 18px 20px;
-  box-shadow: var(--fd-shadow-1);
-  transition: box-shadow var(--fd-transition-base);
+  background:
+    radial-gradient(circle at 90% 18%, color-mix(in srgb, var(--app-brand-primary) 10%, transparent), transparent 34%),
+    var(--app-surface);
+  border: 1px solid color-mix(in srgb, var(--app-brand-primary) 12%, var(--app-border));
+  border-radius: var(--fd-radius-lg);
+  padding: 20px 22px;
+  box-shadow: 0 16px 38px color-mix(in srgb, var(--app-on-surface) 6%, transparent);
+  transition: transform var(--fd-transition-fast) ease, box-shadow var(--fd-transition-fast) ease, border-color var(--fd-transition-fast) ease;
   position: relative; overflow: hidden;
   height: 140px;
   display: flex; flex-direction: column;
   min-width: 0;
 }
-.kpi-card:hover { box-shadow: var(--fd-shadow-2); }
+.kpi-card:hover {
+  border-color: color-mix(in srgb, var(--app-brand-primary) 24%, var(--app-border));
+  box-shadow: 0 18px 46px color-mix(in srgb, var(--app-on-surface) 8%, transparent);
+  transform: translateY(-2px);
+}
 .kpi-card.highlight {
-  background: linear-gradient(135deg, var(--edge-text) 0%, #374151 100%);
-  border-color: transparent;
+  background:
+    radial-gradient(circle at 84% 16%, color-mix(in srgb, var(--app-brand-primary) 16%, transparent), transparent 38%),
+    linear-gradient(135deg, var(--edge-text) 0%, color-mix(in srgb, var(--edge-text) 86%, var(--app-brand-primary)) 100%);
+  border-color: color-mix(in srgb, var(--app-brand-primary) 18%, transparent);
 }
 .kpi-card.highlight .kpi-label,
-.kpi-card.highlight .kpi-state { color: rgba(255, 255, 255, 0.65); }
-.kpi-card.highlight .kpi-value { color: #fff; }
+.kpi-card.highlight .kpi-state { color: color-mix(in srgb, var(--edge-surface) 68%, transparent); }
+.kpi-card.highlight .kpi-value { color: var(--edge-surface); }
 .kpi-card.highlight .kpi-accent {
-  background: rgba(255, 255, 255, 0.15);
+  background: color-mix(in srgb, var(--edge-surface) 15%, transparent);
   color: var(--fd-primary);
 }
 
@@ -446,26 +900,34 @@ app-progress-card { display: contents; }
    Chart Card
 ═══════════════════════════════════════ */
 .chart-card {
-  background: var(--edge-surface);
-  border: 1px solid var(--edge-border-light);
-  border-radius: var(--fd-radius-md);
+  background:
+    radial-gradient(120% 160% at 0% 0%, color-mix(in srgb, var(--app-brand-primary) 8%, transparent), transparent 56%),
+    color-mix(in srgb, var(--app-surface) 96%, transparent);
+  border: 1px solid color-mix(in srgb, var(--app-brand-primary) 14%, var(--app-border));
+  border-radius: var(--fd-radius-lg);
   padding: 20px;
-  box-shadow: var(--fd-shadow-1);
+  box-shadow: 0 16px 38px color-mix(in srgb, var(--app-on-surface) 5%, transparent);
   display: flex; flex-direction: column;
   min-width: 0;
+  transition: border-color var(--fd-transition-fast) ease, box-shadow var(--fd-transition-fast) ease, transform var(--fd-transition-fast) ease;
+}
+.chart-card:hover {
+  border-color: color-mix(in srgb, var(--app-brand-primary) 24%, var(--app-border));
+  box-shadow: 0 18px 46px color-mix(in srgb, var(--app-on-surface) 7%, transparent);
+  transform: translateY(-1px);
 }
 .chart-header {
   display: flex; align-items: flex-start; justify-content: space-between;
-  margin-bottom: 16px; gap: 12px;
+  margin-bottom: 14px; gap: 12px;
 }
-.chart-title { font-size: 14px; font-weight: 600; color: var(--edge-text); }
-.chart-subtitle { font-size: 12px; color: var(--edge-mute-2); margin-top: 2px; }
+.chart-title { font-size: 15px; font-weight: 800; color: var(--edge-text); line-height: 1.25; }
+.chart-subtitle { font-size: 12px; color: var(--edge-muted); margin-top: 3px; }
 .chart-tag {
-  background: var(--edge-surface-alt);
-  border: 1px solid var(--edge-border);
+  background: color-mix(in srgb, var(--app-brand-primary) 7%, var(--app-surface));
+  border: 1px solid color-mix(in srgb, var(--app-brand-primary) 16%, var(--app-border));
   color: var(--edge-muted);
   font-size: 11px; padding: 3px 10px;
-  border-radius: 20px; font-weight: 500;
+  border-radius: 999px; font-weight: 800;
   white-space: nowrap;
 }
 .chart-header-actions {
@@ -476,9 +938,9 @@ app-progress-card { display: contents; }
 }
 
 .chart-body {
-  position: relative; width: 100%; height: 280px; flex: 1;
+  position: relative; width: 100%; height: 300px; flex: 1;
 }
-.chart-body.tall { height: 340px; }
+.chart-body.tall { height: 360px; }
 .chart-body > ngx-charts-line-chart,
 .chart-body > ngx-charts-area-chart,
 .chart-body > ngx-charts-bar-vertical,
@@ -504,7 +966,7 @@ app-progress-card { display: contents; }
 table.raw { width: 100%; font-size: 12px; border-collapse: collapse; }
 table.raw th, table.raw td {
   border-bottom: 1px solid var(--edge-border-light);
-  padding: 6px 8px; text-align: left;
+  padding: 10px 12px; text-align: left;
 }
 table.raw th {
   font-weight: 600; text-transform: uppercase;
@@ -512,7 +974,7 @@ table.raw th {
   color: var(--edge-mute-2);
   border-bottom: 2px solid var(--edge-border);
 }
-table.raw tr:hover td { background: var(--edge-surface-alt); }
+table.raw tr:hover td { background: color-mix(in srgb, var(--app-brand-primary) 7%, var(--app-surface)); }
 
 /* ═══════════════════════════════════════
    ngx-charts text override
@@ -520,8 +982,9 @@ table.raw tr:hover td { background: var(--edge-surface-alt); }
 .ngx-charts text {
   font-family: var(--font-family) !important;
   fill: var(--edge-muted);
+  font-weight: 650;
 }
-.ngx-charts .gridline-path { stroke: var(--edge-border-light); }
+.ngx-charts .gridline-path { stroke: color-mix(in srgb, var(--app-border) 82%, transparent); }
 
 /* ═══════════════════════════════════════
    Snackbar styles (futuro)
