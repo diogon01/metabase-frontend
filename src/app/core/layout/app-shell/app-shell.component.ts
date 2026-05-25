@@ -21,11 +21,16 @@ import { filter } from 'rxjs/operators';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderComponent } from '../header/header.component';
+import { ChatPanelComponent } from '../../../chat/chat-panel.component';
+import { ChatStore } from '../../../chat/chat.store';
 
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterOutlet, MatSidenavModule, SidebarComponent, HeaderComponent],
+  imports: [
+    RouterOutlet, MatSidenavModule,
+    SidebarComponent, HeaderComponent, ChatPanelComponent,
+  ],
   template: `
     <mat-sidenav-container class="shell-container">
       <mat-sidenav
@@ -39,9 +44,14 @@ import { HeaderComponent } from '../header/header.component';
 
       <mat-sidenav-content class="shell-content">
         <app-header (menuToggle)="toggleSidebar()" />
-        <main class="shell-main">
-          <router-outlet />
-        </main>
+        <div class="shell-body" [class.chat-open]="chatOpen()">
+          <main class="shell-main">
+            <router-outlet />
+          </main>
+          @if (chatOpen()) {
+            <app-chat-panel class="shell-chat" />
+          }
+        </div>
       </mat-sidenav-content>
     </mat-sidenav-container>
   `,
@@ -51,12 +61,14 @@ import { HeaderComponent } from '../header/header.component';
 export class AppShellComponent {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly chat = inject(ChatStore);
 
   readonly sidenav = viewChild<MatSidenav>('sidenav');
 
   readonly isMobile = signal(typeof window === 'undefined' ? false : window.innerWidth <= 1024);
   readonly sidenavMode = computed<'side' | 'over'>(() => (this.isMobile() ? 'over' : 'side'));
   readonly sidenavOpened = computed(() => !this.isMobile());
+  readonly chatOpen = this.chat.open;
 
   constructor() {
     // Em mobile, auto-fecha sidebar ao navegar

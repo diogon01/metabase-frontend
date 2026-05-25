@@ -12,6 +12,17 @@
 
 .menu-btn { color: var(--edge-muted); }
 
+.chat-toggle-btn {
+  color: var(--edge-muted) !important;
+  margin-right: 4px;
+}
+.chat-toggle-btn:hover { color: var(--edge-text) !important; }
+.chat-toggle-btn.is-active {
+  background: var(--accent-blue-bg);
+  color: var(--accent-blue) !important;
+}
+.chat-toggle-btn mat-icon { font-size: 20px; width: 20px; height: 20px; }
+
 .title-group {
   display: flex;
   flex-direction: column;

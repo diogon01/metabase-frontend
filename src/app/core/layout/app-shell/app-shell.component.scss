@@ -23,9 +23,41 @@
   min-height: 100vh;
 }
 
-.shell-main {
+.shell-body {
   flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 0;
+  overflow: hidden;
+}
+.shell-body.chat-open {
+  grid-template-columns: 1fr 380px;
+}
+
+.shell-main {
   overflow: auto;
+  min-width: 0;
+}
+
+.shell-chat {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  /* Em mobile: chat vira overlay full-screen sobre o main */
+  .shell-body.chat-open {
+    grid-template-columns: 1fr;
+    position: relative;
+  }
+  .shell-chat {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    background: var(--edge-surface);
+  }
 }
 
 @media (max-width: 1024px) {

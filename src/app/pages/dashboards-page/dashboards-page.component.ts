@@ -20,6 +20,7 @@ import { FiltersStore } from '../../filters/filters-store';
 import { DashboardComponent } from '../../dashboard.component';
 import { ExportService } from '../../core/export/export.service';
 import { ThemeService } from '../../theming/theme.service';
+import { DashboardContextService } from '../../chat/dashboard-context.service';
 import type { Parameter } from '../../core/models/metabase.model';
 
 const FALLBACK_DASHBOARD_ID = 937;
@@ -56,21 +57,25 @@ const FALLBACK_DASHBOARD_ID = 937;
     <app-filters [parameters]="parameters()" />
 
     <main class="main" #mainEl>
-      <div class="page-header">
-        <div>
+      <!-- Page-header como grid 12-col: título grande à esquerda + botão PDF à direita.
+           Em <900px empilha. -->
+      <div class="grid page-header">
+        <div class="col-12 col-md-8 page-header-text">
           <div class="section-title">{{ dashboardName() || 'Carregando…' }}</div>
           <div class="section-sub">
             Renderização live via Metabase API — filtros dinâmicos de <code>dashboard.parameters[]</code>.
           </div>
         </div>
-        <button
-          mat-stroked-button
-          class="export-pdf-btn"
-          [disabled]="exporting()"
-          (click)="exportPdf()">
-          <mat-icon>picture_as_pdf</mat-icon>
-          {{ exporting() ? 'Gerando…' : 'Exportar PDF' }}
-        </button>
+        <div class="col-12 col-md-4 page-header-actions">
+          <button
+            mat-stroked-button
+            class="export-pdf-btn"
+            [disabled]="exporting()"
+            (click)="exportPdf()">
+            <mat-icon>picture_as_pdf</mat-icon>
+            {{ exporting() ? 'Gerando…' : 'Exportar PDF' }}
+          </button>
+        </div>
       </div>
 
       <app-dashboard
@@ -85,15 +90,16 @@ const FALLBACK_DASHBOARD_ID = 937;
       border-bottom: 1px solid var(--edge-border);
       padding: 0 24px;
     }
-    .page-header {
+    /* Page-header é grid responsivo: título col-md-8 + botão col-md-4 */
+    .page-header { margin-bottom: 24px; align-items: center; }
+    .page-header-actions {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 24px;
+      justify-content: flex-end;
+      align-items: center;
     }
-    .export-pdf-btn {
-      flex-shrink: 0;
+    .export-pdf-btn { flex-shrink: 0; }
+    @media (max-width: 899px) {
+      .page-header-actions { justify-content: flex-start; }
     }
   `],
 })
@@ -102,6 +108,7 @@ export class DashboardsPageComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private exportService = inject(ExportService);
+  private dashCtx = inject(DashboardContextService);
   readonly theme = inject(ThemeService);
 
   mainEl = viewChild<ElementRef<HTMLElement>>('mainEl');
@@ -164,6 +171,13 @@ export class DashboardsPageComponent {
     this.parameters.set(meta?.parameters ?? []);
     this.dashboardName.set(meta?.name ?? '');
     this.filtersStore.applyDefaults(meta?.parameters ?? []);
+    // Atualiza contexto exposto pro chat ("📎 Anexar dashboard atual")
+    this.dashCtx.set({
+      dashboardId: this.dashboardId(),
+      dashboardName: meta?.name ?? `Dashboard ${this.dashboardId()}`,
+      tabId: this.effectiveTabId(),
+      filters: this.filtersStore.snapshot(),
+    });
   }
 
   shortTabName(name: string): string {

@@ -6,6 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '../../auth/auth.service';
 import { ThemeService } from '../../../theming/theme.service';
+import { ChatStore } from '../../../chat/chat.store';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +24,16 @@ import { ThemeService } from '../../../theming/theme.service';
       </div>
 
       <div class="header-spacer"></div>
+
+      <button
+        mat-icon-button
+        type="button"
+        class="chat-toggle-btn"
+        [class.is-active]="chat.open()"
+        (click)="chat.toggleOpen()"
+        title="Assistente IA">
+        <mat-icon>smart_toy</mat-icon>
+      </button>
 
       @if (auth.user(); as user) {
         <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-trigger">
@@ -53,6 +64,7 @@ import { ThemeService } from '../../../theming/theme.service';
 export class HeaderComponent {
   readonly auth = inject(AuthService);
   readonly theme = inject(ThemeService);
+  readonly chat = inject(ChatStore);
   @Output() menuToggle = new EventEmitter<void>();
 
   displayName(u: { common_name?: string; first_name?: string; email?: string }): string {
