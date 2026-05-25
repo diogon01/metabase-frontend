@@ -108,13 +108,17 @@ export class ChatStore {
   }
 
   private mockReply(userText: string, ctx?: ChatContext): string {
-    const ctxStr = ctx
-      ? `\n\n*Contexto recebido: ${ctx.dashboardName} (id=${ctx.dashboardId}), filtros ${JSON.stringify(ctx.filters ?? {})}*`
+    const dash = ctx ? ` em **${ctx.dashboardName}**` : '';
+    const filterCount = ctx?.filters ? Object.keys(ctx.filters).filter((k) => {
+      const v = ctx.filters![k];
+      return v !== null && v !== undefined && v !== '';
+    }).length : 0;
+    const filterStr = filterCount
+      ? ` (considerando ${filterCount} ${filterCount === 1 ? 'filtro' : 'filtros'} ativos)`
       : '';
     return (
-      `🤖 **Placeholder** — Agente IA ainda não integrado. ` +
-      `Sua mensagem foi: _"${userText}"_.` +
-      ctxStr
+      `Recebi sua pergunta sobre _"${userText}"_${dash}${filterStr}.\n\n` +
+      `Em breve trarei a análise completa com gráficos e insights.`
     );
   }
 }

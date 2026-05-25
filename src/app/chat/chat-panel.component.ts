@@ -1,18 +1,21 @@
 /**
  * ChatPanelComponent — splitter fixo à direita do dashboard.
  *
- * Phase 7.3 esqueleto: lista de mensagens + input + botão de anexar
- * contexto do dashboard atual. Resposta do agente é placeholder até
- * a integração com LLM real (Phase futura de IA).
+ * UI polida com:
+ *  - Empty state convidativo com chips de sugestão clicáveis
+ *  - Header limpo (avatar IA + nome + status "online")
+ *  - Mensagens com bubbles arredondadas, timestamps discretos
+ *  - Input textarea com auto-resize (cresce até 4 linhas)
+ *  - Indicador "digitando" animado
+ *  - Botão "anexar dashboard atual" inline quando há contexto disponível
  *
- * Toggle: botão no header da app abre/fecha; estado persiste em localStorage.
+ * Backend de IA ainda não conectado — respostas são mock natural-soando.
  */
 import {
   AfterViewChecked,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  effect,
   inject,
   signal,
   viewChild,
@@ -21,36 +24,47 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { marked } from 'marked';
 import { ChatStore } from './chat.store';
 import { DashboardContextService } from './dashboard-context.service';
 
+const SUGGESTIONS = [
+  'Resumo do mês atual',
+  'Quais cards estão piorando?',
+  'Compare 2024 vs 2025',
+  'Top 5 clientes do período',
+];
+
 @Component({
   selector: 'app-chat-panel',
   standalone: true,
-  imports: [FormsModule, MatIconModule, MatButtonModule, MatMenuModule],
+  imports: [FormsModule, MatIconModule, MatButtonModule, MatMenuModule, MatTooltipModule],
   template: `
-    <aside class="chat-panel" [class.is-open]="chat.open()">
+    <aside class="chat-panel">
       <header class="chat-header">
         <div class="chat-title">
-          <mat-icon class="bot-icon">smart_toy</mat-icon>
-          <div>
+          <div class="bot-avatar">
+            <mat-icon>auto_awesome</mat-icon>
+          </div>
+          <div class="title-text">
             <strong>Assistente</strong>
-            <small>Placeholder — Agente IA em breve</small>
+            <span class="online-dot"></span>
+            <small>Online</small>
           </div>
         </div>
         <div class="chat-actions">
-          <button mat-icon-button [matMenuTriggerFor]="moreMenu" title="Mais opções">
+          <button mat-icon-button [matMenuTriggerFor]="moreMenu" matTooltip="Mais">
             <mat-icon>more_vert</mat-icon>
           </button>
-          <button mat-icon-button (click)="chat.toggleOpen()" title="Fechar">
+          <button mat-icon-button (click)="chat.toggleOpen()" matTooltip="Fechar">
             <mat-icon>close</mat-icon>
           </button>
         </div>
         <mat-menu #moreMenu>
-          <button mat-menu-item (click)="clear()">
-            <mat-icon>delete_outline</mat-icon>
+          <button mat-menu-item (click)="clear()" [disabled]="!chat.hasMessages()">
+            <mat-icon>delete_sweep</mat-icon>
             <span>Limpar conversa</span>
           </button>
         </mat-menu>
@@ -59,32 +73,53 @@ import { DashboardContextService } from './dashboard-context.service';
       <div #scrollEl class="chat-messages">
         @if (!chat.hasMessages()) {
           <div class="chat-empty">
-            <mat-icon>chat</mat-icon>
-            <p>Sem mensagens ainda. Faça uma pergunta sobre seus dados.</p>
-            <small>Sugestões: "Resumo do mês", "Quais cards estão piorando?", "Compare 2024 vs 2025"</small>
+            <div class="empty-glow"></div>
+            <div class="empty-icon">
+              <mat-icon>auto_awesome</mat-icon>
+            </div>
+            <h3>Como posso ajudar?</h3>
+            <p>Faça perguntas sobre seus dashboards e métricas.</p>
+
+            <div class="suggestion-chips">
+              @for (s of suggestions; track s) {
+                <button class="chip" (click)="useSuggestion(s)">
+                  <mat-icon>auto_fix_high</mat-icon>
+                  <span>{{ s }}</span>
+                </button>
+              }
+            </div>
           </div>
         } @else {
           @for (m of chat.messages(); track m.id) {
             <article class="msg" [class.user]="m.role === 'user'" [class.assistant]="m.role === 'assistant'">
-              <div class="msg-bubble">
-                <div class="msg-body" [innerHTML]="render(m.content)"></div>
-                @if (m.context) {
-                  <div class="msg-context">
-                    <mat-icon>attachment</mat-icon>
-                    {{ m.context.dashboardName }}
-                    @if (m.context.filters && objectKeys(m.context.filters).length) {
-                      · {{ objectKeys(m.context.filters).length }} filtros
-                    }
-                  </div>
-                }
+              @if (m.role === 'assistant') {
+                <div class="msg-avatar"><mat-icon>auto_awesome</mat-icon></div>
+              }
+              <div class="msg-wrap">
+                <div class="msg-bubble">
+                  <div class="msg-body" [innerHTML]="render(m.content)"></div>
+                  @if (m.context) {
+                    <div class="msg-context">
+                      <mat-icon>attachment</mat-icon>
+                      <span>{{ m.context.dashboardName }}</span>
+                      @if (m.context.filters && objectKeys(m.context.filters).length) {
+                        <span class="dot-sep">·</span>
+                        <span>{{ objectKeys(m.context.filters).length }} filtros</span>
+                      }
+                    </div>
+                  }
+                </div>
+                <div class="msg-meta">{{ formatTime(m.timestamp) }}</div>
               </div>
-              <div class="msg-meta">{{ formatTime(m.timestamp) }}</div>
             </article>
           }
           @if (chat.sending()) {
             <article class="msg assistant">
-              <div class="msg-bubble typing">
-                <span></span><span></span><span></span>
+              <div class="msg-avatar"><mat-icon>auto_awesome</mat-icon></div>
+              <div class="msg-wrap">
+                <div class="msg-bubble typing">
+                  <span></span><span></span><span></span>
+                </div>
               </div>
             </article>
           }
@@ -93,18 +128,17 @@ import { DashboardContextService } from './dashboard-context.service';
 
       <footer class="chat-input">
         @if (ctxService.current(); as c) {
-          <div class="ctx-chip" title="Será anexado à próxima mensagem">
-            <mat-icon>attachment</mat-icon>
-            <span class="ctx-chip-text">{{ c.dashboardName }}</span>
-            @if (attachContext()) {
-              <button mat-icon-button (click)="attachContext.set(false)" class="ctx-remove" title="Desanexar">
-                <mat-icon>close</mat-icon>
-              </button>
-            } @else {
-              <button mat-button class="ctx-add" (click)="attachContext.set(true)">
-                <mat-icon>add</mat-icon> Anexar
-              </button>
-            }
+          <div class="ctx-bar">
+            <mat-icon class="ctx-icon">dashboard</mat-icon>
+            <span class="ctx-label">{{ c.dashboardName }}</span>
+            <button
+              mat-button
+              class="ctx-toggle"
+              [class.active]="attachContext()"
+              (click)="attachContext.set(!attachContext())">
+              <mat-icon>{{ attachContext() ? 'check' : 'add_link' }}</mat-icon>
+              <span>{{ attachContext() ? 'Anexado' : 'Anexar' }}</span>
+            </button>
           </div>
         }
 
@@ -112,17 +146,18 @@ import { DashboardContextService } from './dashboard-context.service';
           <textarea
             #inputEl
             class="chat-textarea"
-            placeholder="Pergunte algo sobre seus dados…"
+            placeholder="Pergunte algo…"
             [(ngModel)]="draft"
+            (input)="autoResize($event)"
             (keydown.enter)="onEnter($event)"
             rows="1"></textarea>
           <button
-            mat-icon-button
             class="send-btn"
-            [disabled]="!draft().trim() || chat.sending()"
+            [class.active]="canSend()"
+            [disabled]="!canSend()"
             (click)="onSend()"
-            title="Enviar (Enter)">
-            <mat-icon>send</mat-icon>
+            matTooltip="Enviar (Enter)">
+            <mat-icon>arrow_upward</mat-icon>
           </button>
         </div>
       </footer>
@@ -138,6 +173,7 @@ export class ChatPanelComponent implements AfterViewChecked {
 
   draft = signal('');
   attachContext = signal(false);
+  suggestions = SUGGESTIONS;
 
   scrollEl = viewChild<ElementRef<HTMLElement>>('scrollEl');
   inputEl = viewChild<ElementRef<HTMLTextAreaElement>>('inputEl');
@@ -148,15 +184,18 @@ export class ChatPanelComponent implements AfterViewChecked {
     const count = this.chat.messages().length;
     if (count !== this.prevMsgCount) {
       this.prevMsgCount = count;
-      // Auto-scroll pro último
       const el = this.scrollEl()?.nativeElement;
-      if (el) el.scrollTop = el.scrollHeight;
+      if (el) requestAnimationFrame(() => { el.scrollTop = el.scrollHeight; });
     }
+  }
+
+  canSend(): boolean {
+    return !!this.draft().trim() && !this.chat.sending();
   }
 
   onEnter(ev: Event): void {
     const keyEv = ev as KeyboardEvent;
-    if (keyEv.shiftKey) return; // Shift+Enter = nova linha
+    if (keyEv.shiftKey) return;
     keyEv.preventDefault();
     this.onSend();
   }
@@ -168,6 +207,21 @@ export class ChatPanelComponent implements AfterViewChecked {
     this.chat.send(text, ctx);
     this.draft.set('');
     this.attachContext.set(false);
+    // Reseta altura do textarea
+    const el = this.inputEl()?.nativeElement;
+    if (el) el.style.height = 'auto';
+  }
+
+  useSuggestion(text: string): void {
+    this.draft.set(text);
+    const el = this.inputEl()?.nativeElement;
+    if (el) { el.focus(); this.autoResize({ target: el } as any); }
+  }
+
+  autoResize(ev: Event): void {
+    const el = ev.target as HTMLTextAreaElement;
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
   }
 
   clear(): void {

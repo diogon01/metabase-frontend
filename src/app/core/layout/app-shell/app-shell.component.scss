@@ -1,10 +1,10 @@
 :host {
   display: block;
-  min-height: 100vh;
+  height: 100vh;       /* fixa pra que filhos flex/grid possam herdar altura corretamente */
 }
 
 .shell-container {
-  min-height: 100vh;
+  height: 100%;
   background:
     radial-gradient(circle at top left, rgba(255, 213, 0, 0.1), transparent 20%),
     linear-gradient(180deg, #f7f9fb 0%, #fbfcfd 100%);
@@ -20,30 +20,34 @@
 .shell-content {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;       /* altura fixa do viewport, sem depender de min-height */
+  min-height: 0;
 }
 
 .shell-body {
   flex: 1;
   display: grid;
   grid-template-columns: 1fr;
-  min-height: 0;
+  min-height: 0;       /* permite que filhos com overflow scrollam corretamente */
   overflow: hidden;
 }
 .shell-body.chat-open {
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: minmax(0, 1fr) 380px;
 }
 
 .shell-main {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   min-width: 0;
+  min-height: 0;
+  height: 100%;
 }
 
 .shell-chat {
   display: block;
   height: 100%;
-  overflow: hidden;
   min-width: 0;
+  overflow: hidden;
 }
 
 @media (max-width: 1024px) {
@@ -58,9 +62,6 @@
     z-index: 50;
     background: var(--edge-surface);
   }
-}
-
-@media (max-width: 1024px) {
   .shell-sidenav {
     width: min(92vw, 320px);
     box-shadow: none;
